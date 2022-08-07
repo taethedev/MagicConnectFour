@@ -1,0 +1,13 @@
+@import '../global.css';
+
+.Main__form-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+}
+.Main__form-container .btn {
+    max-width: 100px;
+    width: 100%;
+    margin-top: 1em;
+}

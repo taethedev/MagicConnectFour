@@ -2,14 +2,20 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import io from "socket.io-client";
+import MainMenu from './Components/MainMenu';
+import GameBoard from './Components/GameBoard';
 const SERVER = process.env.REACT_APP_SOCKET_SERVER;
 const socket = io(SERVER);
+
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [lastPong, setLastPong] = useState(null);
-  const [text, setText] = useState('');
-  const [receivedText, setReceivedText] = useState([]);
-  const datas = [];
+
+  const [data, setData] = useState({
+    name: '',
+    roomNumber: '',
+    roomFull: false,
+    isHost: false,
+  })
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -20,50 +26,47 @@ function App() {
       setIsConnected(false);
     });
 
-    socket.on('pong', () => {
-      setLastPong(new Date().toISOString());
-    });
-    socket.on('received-msg', (data) => {
-      datas.push(data)
-      console.log(datas)
-      setReceivedText([data])
-    });
-    socket.on('connected', (data) => {
-      console.log(data)
-    })
 
     return () => {
       socket.off('connect');
       socket.off('disconnect');
-      socket.off('pong');
     };
   }, []);
 
-  const sendPing = () => {
-    socket.emit('ping');
+  const joinRoom = (room) => {
+    console.log(`Joining Room: '${room}'`)
+    socket.emit('join-room', room, (cb) => {
+      let { msg, isHost } = cb;
+      if (msg === 'success') {
+        if (isHost) {
+          setData({ ...data, isHost: true, roomNumber: room });
+        } else {
+          setData({...data, roomNumber: room});
+        }
+      }
+      else if (msg === 'full') {
+        setData({...data, roomFull: true});
+      }
+    });
   }
-  const sendMsg = () => {
-    socket.emit('sending-msg', text);
-    setText('')
+  const resetRoomFull = () => {
+    setData({...data, roomFull: false});
   }
-  function handleChange(e) {
-    setText(e.target.value);
-  }
-
 
   return (
-    <div>
-      <p>Connected: { '' + isConnected }</p>
-      <p>Last pong: { lastPong || '-' }</p>
-      {receivedText.map((item => {
-        return (
-        <h1>{item}</h1>
-        )
-      }))}
-      
-      <input type="text" value={text} onChange={handleChange}></input>
-      <button onClick={ sendMsg }>Send Msg</button>
-  </div>
+    <div className='App'>
+      <div className='App__container'>
+        <h1 style={{color: 'lightcoral'}}>Magic Connect Four</h1>
+        <div className='top-status'>
+          {isConnected && <span>Connected</span> }
+          {!isConnected && <span>Disconnected</span> }
+          {data.roomNumber && <span>Player: {data.isHost ? '1' : '2'}</span> }
+          {data.roomNumber && <span>Room: {data.roomNumber}</span> }
+        </div>
+        { !data.roomNumber && <MainMenu joinRoom={joinRoom} isConnected={isConnected} isRoomFull={data.roomFull} resetRoomFull={resetRoomFull} /> }
+        { data.roomNumber && isConnected && <GameBoard socket={socket} isHost={data.isHost} roomNumber={data.roomNumber} /> }
+      </div>
+    </div>
   );
 }
 
