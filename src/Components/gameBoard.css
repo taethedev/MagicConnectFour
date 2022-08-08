@@ -12,6 +12,7 @@
     align-items: center;
     cursor: pointer;
     transition: all .3s ease;
+    
 }
 .turn-card:hover {
     transform: translateY(-20px);

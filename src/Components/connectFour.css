@@ -1,0 +1,29 @@
+@import '../global.css';
+
+.board {
+    display: grid;
+    justify-content: stretch;
+    height: 100%;
+    max-width: 500px;
+    max-height: 2050px;
+}
+.cell.drop-button {
+    background-color: black;
+    border-color: rgba(145, 146, 219, 0.959);
+}
+
+.cell {
+    width: 100%;
+    height: 100%;
+    min-width: 25px;
+    min-height: 25px;
+    border-radius: 50%;
+    border-color: rgba(19, 19, 19, 0.349);
+}
+.cell.board-block {
+    background-color: white;
+}
+.board-block-wrapper {
+    border: 1px solid rgb(226, 160, 160);
+    background-color: #f9e852;
+}

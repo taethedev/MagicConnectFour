@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import ConnectFour from './ConnectFour';
 import './gameBoard.css'
 
 export default function GameBoard(props) {
@@ -9,42 +10,43 @@ export default function GameBoard(props) {
     isTurnChosen: false,
     isGameReady: false,
   })
-  const [gameData, setGameData] = useState({
-    turn: 1,
-    text:[],
-    currentText: ''
-  })
-  const [sameple, setSameple] = useState('')
+  const [playerTurn, setPlayerTurn] = useState('')
+
 
   // Pre-Game
   socket.on('set-turn', (turn) => {
+    console.log('setting turn')
     let myTurn = turn === 'first' ? 'first' : 'second';
     setData({...data, isFirst: myTurn, isTurnChosen: true, isGameReady: true});
-    setGameData({...gameData, turn: turn === 'first' ? 2 : 1})
+    setPlayerTurn(turn === 'first' ? '2' : '1')
   })
   socket.on('game-ready', () => {
     console.log("ready")
     setData({...data, isGameReady: true });
   })
   // Game Data
-  socket.on('receive-text', (text, nextTurn) => {
-    console.log("text received")
-    let newArray = [...gameData.text, text];
-    if (newArray.length >= 6) {
-      newArray = newArray.slice(1, newArray.length);
-    }
-    setGameData({...gameData, turn: nextTurn, text: newArray });
-  })
+  // socket.on('receive-text', (text, nextTurn) => {
+  //   console.log("text received")
+  //   let newArray = [...gameData.text, text];
+  //   if (newArray.length >= 6) {
+  //     newArray = newArray.slice(1, newArray.length);
+  //   }
+  //   setGameData({...gameData, turn: nextTurn, text: newArray });
+  // })
+  function handleSetPlayerTurn(turn) {
+    console.log('Setting player turn to: ' + turn)
+    setPlayerTurn(turn);
+  }
 
   function chooseTurn (turn) {
     if (turn === 'first') {
       setData({...data, isFirst: true, isTurnChosen: true });
-      setGameData({...gameData, turn: 1});
+      setPlayerTurn('1');
       console.log('chose 1')
     }
     else {
       setData({...data, isFirst: false, isTurnChosen: true });
-      setGameData({...gameData, turn: 2})
+      setPlayerTurn('2')
       console.log('chose 2')
     }
 
@@ -52,22 +54,22 @@ export default function GameBoard(props) {
   }
   function isMyTurn () {
     let myTurn = false;
-    console.log(gameData.turn);
-    if (isHost && gameData.turn == 1) {
+    console.log(playerTurn);
+    if (isHost && playerTurn == 1) {
       myTurn = true;
-    } else if (!isHost && gameData.turn == 2) {
+    } else if (!isHost && playerTurn == 2) {
       myTurn = true;
     }
     return myTurn;
   }
-  function sendText () {
-    console.log('sending')
-    socket.emit('send-message', {player: isHost ? 1 : 2, text: gameData.currentText}, roomNumber, gameData.turn == 1 ? 2 : 1);
-    setGameData({...gameData, currentText: ''})
-  }
-  const handleTextChange = (e) => {
-    setGameData({...gameData, currentText: e.target.value})
-  }
+  // function sendText () {
+  //   console.log('sending')
+  //   socket.emit('send-message', {player: isHost ? 1 : 2, text: gameData.currentText}, roomNumber, gameData.turn == 1 ? 2 : 1);
+  //   setGameData({...gameData, currentText: ''})
+  // }
+  // const handleTextChange = (e) => {
+  //   setGameData({...gameData, currentText: e.target.value})
+  // }
 
   const TurnCards = () => {
     return (
@@ -106,9 +108,9 @@ export default function GameBoard(props) {
       </div>
     )
   }
-  const listTexts = gameData.text.map((t, idx)=>{
-    return <div style={{marginBottom: '5px', textAlign: 'left'}} key={idx}><b>Player {t.player}:</b> <span style={{color: 'darkcyan'}}>{t.text}</span></div>
-  })
+  // const listTexts = gameData.text.map((t, idx)=>{
+  //   return <div style={{marginBottom: '5px', textAlign: 'left'}} key={idx}><b>Player {t.player}:</b> <span style={{color: 'darkcyan'}}>{t.text}</span></div>
+  // })
 
   return (
     <div className='GameBlock'>
@@ -121,14 +123,12 @@ export default function GameBoard(props) {
       { !data.isTurnChosen && !isHost && <WaitingHost /> }
       { data.isGameReady && data.isTurnChosen && <div style={{ display:'flex', flexDirection: 'column', alignItems:'center' }}>
         <h1>{isMyTurn() ? 'My Turn!' : 'Opponents Turn'}</h1>
-        <div>{listTexts}</div>
-        { isMyTurn() && 
-          <div>
-            <input type="text" value={gameData.currentText} onChange={handleTextChange} placeholder='Say Something' />
-            <button onClick={()=> sendText()}>Send</button>
-          </div> 
-        }
+
+        <ConnectFour playerTurn={playerTurn} setPlayerTurn={handleSetPlayerTurn} isFirst={data.isFirst} socket={socket} roomNumber={roomNumber} isMyTurn={isMyTurn} />
+
       </div> }
     </div>
   )
 }
+
+
