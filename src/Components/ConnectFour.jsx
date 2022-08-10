@@ -50,13 +50,24 @@ export default function ConnectFour(props) {
         }
     },[isMyTurn()])
 
-    socket.on('receive-handle-drop', (param, currentPlayer, nextPlayer) => {
-        console.log('next turn: ' + nextPlayer);
-        console.log('dropping: ' + param);
-        console.log('playerTurn: ' + playerTurn);
-        handleDrop(param, currentPlayer);
-        setPlayerTurn(nextPlayer);
-    })
+    useEffect(() => {
+        socket.on('receive-handle-drop', (param, currentPlayer, nextPlayer) => {
+            handleDrop(param, currentPlayer);
+            setPlayerTurn(nextPlayer);
+            console.log("in here")
+        })
+    
+    
+        return () => {
+          socket.off('receive-handle-drop');
+        };
+      }, [board]);
+
+    // socket.on('receive-handle-drop', (param, currentPlayer, nextPlayer) => {
+    //     handleDrop(param, currentPlayer);
+    //     setPlayerTurn(nextPlayer);
+    //     console.log("in here")
+    // })
     socket.on('restarting-game' ,(winner) => {
         restartGame(winner)
     })
@@ -92,7 +103,7 @@ export default function ConnectFour(props) {
     setBoard(createBoard());
   }
   function sendRestartGame() {
-    let winner = win.winner === boardSettings.colors.p1 ? 2 : 1
+    let winner = win.winner === boardSettings.colors.p1 ? 1 : 2
     socket.emit('restart-game', winner, roomNumber);
   }
 
@@ -114,14 +125,14 @@ export default function ConnectFour(props) {
     return rows - 1;
   }
 
-  function handleDrop(column, currentPlayer) {
+  async function handleDrop(column, currentPlayer) {
     if (dropping || win) return;
     const row = findFirstEmptyRow(column);
     let playerColor = getPlayerColor(currentPlayer);
-    console.log(playerColor)
+    console.log('asdasdasd: '+ row)
     if (row < 0) return;
     setDropping(true);
-    // animateDrop(row, column, playerColor);
+    await animateDrop(row, column, playerColor);
     setDropping(false);
     const newBoard = board.slice();
     newBoard[getIndex(row, column)] = playerColor;
@@ -132,27 +143,27 @@ export default function ConnectFour(props) {
     socket.emit('send-handle-drop', column, roomNumber, playerTurn);
   }
 
-//   async function animateDrop(row, column, color, currentRow) {
-//     if (currentRow === undefined) {
-//       currentRow = 0;
-//     }
-//     return new Promise(resolve => {
-//       if (currentRow > row) {
-//         return resolve();
-//       }
-//       if (currentRow > 0) {
-//         let c = getDomBoardCell(getIndex(currentRow - 1, column));
-//         let bg = c.style.backgroundColor;
-//         c.style.backgroundColor = boardSettings.colors.empty;
-//       }
-//       let c = getDomBoardCell(getIndex(currentRow, column));
-//       c.style.backgroundColor = color;
-//       setTimeout(
-//         () => resolve(animateDrop(row, column, color, ++currentRow)),
-//         boardSettings.dropAnimationRate
-//       );
-//     });
-//   }
+  async function animateDrop(row, column, color, currentRow) {
+    if (currentRow === undefined) {
+      currentRow = 0;
+    }
+    return new Promise(resolve => {
+      if (currentRow > row) {
+        return resolve();
+      }
+      if (currentRow > 0) {
+        let c = getDomBoardCell(getIndex(currentRow - 1, column));
+        let bg = c.style.backgroundColor;
+        c.style.backgroundColor = boardSettings.colors.empty;
+      }
+      let c = getDomBoardCell(getIndex(currentRow, column));
+      c.style.backgroundColor = color;
+      setTimeout(
+        () => resolve(animateDrop(row, column, color, ++currentRow)),
+        boardSettings.dropAnimationRate
+      );
+    });
+  }
 
   /**
    * End game animation.
