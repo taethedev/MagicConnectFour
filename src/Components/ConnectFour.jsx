@@ -54,7 +54,6 @@ export default function ConnectFour(props) {
         socket.on('receive-handle-drop', (param, currentPlayer, nextPlayer) => {
             handleDrop(param, currentPlayer);
             setPlayerTurn(nextPlayer);
-            console.log("in here")
         })
     
     
@@ -129,7 +128,6 @@ export default function ConnectFour(props) {
     if (dropping || win) return;
     const row = findFirstEmptyRow(column);
     let playerColor = getPlayerColor(currentPlayer);
-    console.log('asdasdasd: '+ row)
     if (row < 0) return;
     setDropping(true);
     await animateDrop(row, column, playerColor);
@@ -341,7 +339,7 @@ export default function ConnectFour(props) {
   }
 
   const cells = board.map((c, i) => (
-    // <div className="board-block-wrapper">
+    <div className="board-block-wrapper">
         <button
             key={"c" + i}
             className="cell board-block"
@@ -349,7 +347,7 @@ export default function ConnectFour(props) {
                 backgroundColor: c
             }}
         />
-    // </div>
+    </div>
   ));
 
   function getGridTemplateColumns() {
