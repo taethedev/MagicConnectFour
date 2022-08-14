@@ -12,6 +12,10 @@ import logo from './assets/images/logo_white.png'
 const SERVER = process.env.REACT_APP_SOCKET_SERVER;
 const socket = io(SERVER);
 
+const str = window.location.search;
+const urlParam = new URLSearchParams(str);
+const room = urlParam.get('room');
+
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [isInstruction, setIsInstruction] = useState(true);
@@ -26,29 +30,31 @@ function App() {
   })
 
   useEffect(() => {
+    
     socket.on('connect', () => {
       setIsConnected(true);
     });
-
+    
     socket.on('disconnect', () => {
       setIsConnected(false);
     });
-
+    
     socket.on('player-joined', datas => {
       setPlayerCount(datas.playerCount);
       playerNotification('Player Joined')
     })
-
+    
     socket.on('player-left', data => {
       setPlayerCount(data.playerCount);
       playerNotification('Player Left')
 
       setTimeout(()=> {
-        window.location = window.location;
+        window.location = window.location.origin;
       }, 2000)
     })
     if (window.sessionStorage.getItem('understand') === 'true') setIsInstruction(false);
-
+    if (room) joinRoom(room);
+    
     return () => {
       socket.off('connect');
       socket.off('disconnect');
@@ -107,9 +113,9 @@ function App() {
             {data.roomNumber && <span>Room({playerCount}/{maxPlayer}): {data.roomNumber}</span> }
           </div>
         </div>
-        { isInstruction && <Instruction setIsInstruction={setIsInstruction} /> }
-        { !data.roomNumber && !isInstruction && <MainMenu joinRoom={joinRoom} isConnected={isConnected} isRoomFull={data.roomFull} resetRoomFull={resetRoomFull} /> }
-        { data.roomNumber && isConnected && !isInstruction && <GameBoard socket={socket} isHost={data.isHost} roomNumber={data.roomNumber} /> }
+        { isInstruction && !data.roomNumber && <Instruction setIsInstruction={setIsInstruction} /> }
+        { !isInstruction && !data.roomNumber && <MainMenu joinRoom={joinRoom} isConnected={isConnected} isRoomFull={data.roomFull} resetRoomFull={resetRoomFull} /> }
+        { data.roomNumber && isConnected && <GameBoard socket={socket} isHost={data.isHost} roomNumber={data.roomNumber} /> }
       </div>
     </div>
   );

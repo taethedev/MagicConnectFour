@@ -99,12 +99,20 @@ export default function GameBoard(props) {
     return (
       <div style={{ margin: '15% 0', color: 'var(--main-color2)' }}>
         <h1>Waiting For Your Archenemy...</h1>
+        <h2><a style={{color: 'var(--main-color3)', textDecoration: 'underline', cursor:'pointer'}} onClick={()=> sendInvite()}>Send Invitation</a></h2>
       </div>
     )
   }
-  // const listTexts = gameData.text.map((t, idx)=>{
-  //   return <div style={{marginBottom: '5px', textAlign: 'left'}} key={idx}><b>Player {t.player}:</b> <span style={{color: 'darkcyan'}}>{t.text}</span></div>
-  // })
+
+  const sendInvite = () => {
+    if (!navigator.share) return;
+
+    navigator.share({
+      url: `/?room=${roomNumber}`,
+      title: "Invitation: Play Connect 4",
+      text: "Come and play some Connect Four with me!"
+    })
+  }
 
   return (
     <div className='GameBlock'>
