@@ -39,13 +39,14 @@ export default function MainMenu(props) {
         <div className='GameBlock'>
             <div>
                 <div>
-                    <h1>MainMenu</h1>
+                    <h1 className='Main_header'>Welcome to Magic Connect 4</h1>
                 </div>
                 <div className='Main__form-container'>
-                    <input type="text" value={roomName} onChange={handleRoomName} placeholder='Private Room Name' />
+                    <input className='form__input' autoFocus type="text" value={roomName} onChange={handleRoomName} placeholder='Private Room Name' />
                     {data.roomNameMaxError && <p style={{color: 'red'}}>Room name is too long.</p> }
                     {isRoomFull && <p style={{color: 'red'}}>Room is full.</p> }
-                    <button className='btn' onClick={handleJoinRoom}>Join</button>
+                    {/* <button className='btn' onClick={handleJoinRoom}>Join</button> */}
+                    <button className="btn button-53" role="button" onClick={handleJoinRoom}>Join</button>
                 </div>
                 {data.isSent && !isConnected && !data.connectionFailed && <Loading /> }
                 {data.connectionFailed && <h1>Server is currently down. Please try again later.</h1>}

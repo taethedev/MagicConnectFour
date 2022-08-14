@@ -1,11 +1,15 @@
 @import '../global.css';
 
 .board {
+    --cell-size-mobile: 29px;
+    --cell-size-desktop: 50px;
+
     display: grid;
     justify-content: stretch;
     /* height: 100%; */
-    max-width: 500px;
+    max-width: 800px;
     max-height: 2050px;
+    margin-bottom: 5em;
 }
 .cell.drop-button {
     background-color: black;
@@ -15,10 +19,13 @@
 .cell {
     width: 100%;
     /* height: 100%; */
-    min-width: 25px;
-    min-height: 25px;
+    min-width: var(--cell-size-mobile);
+    min-height: var(--cell-size-mobile);
     border-radius: 50%;
     border-color: rgba(19, 19, 19, 0.349);
+    animation-duration: .5s;
+    animation-name: shrink;
+    
 }
 .cell.board-block {
     background-color: #FFFFFF;
@@ -27,3 +34,34 @@
     border: 1px solid rgb(226, 160, 160);
     background-color: #f9e852;
 }
+
+@media only screen and (min-width: 800px) {
+    .cell {
+      width: var(--cell-size-desktop);
+      height: var(--cell-size-desktop);
+      animation-duration: .5s;
+      animation-name: enlarge;
+    }
+}
+@keyframes enlarge {
+    from {
+        width: var(--cell-size-mobile);
+        height: var(--cell-size-mobile);
+    }
+    to {
+        width: var(--cell-size-desktop);
+        height: var(--cell-size-desktop);
+    }
+}
+@keyframes shrink {
+    from {
+        width: var(--cell-size-desktop);
+        height: var(--cell-size-desktop);
+    }
+    to {
+        width: var(--cell-size-mobile);
+        height: var(--cell-size-mobile);
+    }
+}
+
+  

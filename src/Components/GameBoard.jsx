@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ConnectFour from './ConnectFour';
 import './gameBoard.css'
+import one from '../assets/images/one.png'
+import two from '../assets/images/two.png'
 
 export default function GameBoard(props) {
   const { socket, isHost, roomNumber } = props;
@@ -12,29 +14,27 @@ export default function GameBoard(props) {
   })
   const [playerTurn, setPlayerTurn] = useState('')
 
+  useEffect(()=> {
+      // Pre-Game
+    socket.on('set-turn', (turn) => {
+      // console.log('setting turn')
+      let myTurn = turn === 'first' ? 'first' : 'second';
+      setData({...data, isFirst: myTurn, isTurnChosen: true, isGameReady: true});
+      setPlayerTurn(turn === 'first' ? '2' : '1')
+    })
+    socket.on('game-ready', () => {
+      // console.log("ready")
+      setData({...data, isGameReady: true });
+    })
+    return () => {
+      socket.off('set-turn');
+      socket.off('game-ready');
+    };
+  },[])
 
-  // Pre-Game
-  socket.on('set-turn', (turn) => {
-    console.log('setting turn')
-    let myTurn = turn === 'first' ? 'first' : 'second';
-    setData({...data, isFirst: myTurn, isTurnChosen: true, isGameReady: true});
-    setPlayerTurn(turn === 'first' ? '2' : '1')
-  })
-  socket.on('game-ready', () => {
-    console.log("ready")
-    setData({...data, isGameReady: true });
-  })
-  // Game Data
-  // socket.on('receive-text', (text, nextTurn) => {
-  //   console.log("text received")
-  //   let newArray = [...gameData.text, text];
-  //   if (newArray.length >= 6) {
-  //     newArray = newArray.slice(1, newArray.length);
-  //   }
-  //   setGameData({...gameData, turn: nextTurn, text: newArray });
-  // })
+
   function handleSetPlayerTurn(turn) {
-    console.log('Setting player turn to: ' + turn)
+    // console.log('Setting player turn to: ' + turn)
     setPlayerTurn(turn);
   }
 
@@ -42,19 +42,19 @@ export default function GameBoard(props) {
     if (turn === 'first') {
       setData({...data, isFirst: true, isTurnChosen: true });
       setPlayerTurn('1');
-      console.log('chose 1')
+      // console.log('chose 1')
     }
     else {
       setData({...data, isFirst: false, isTurnChosen: true });
       setPlayerTurn('2')
-      console.log('chose 2')
+      // console.log('chose 2')
     }
 
     socket.emit('turn-chosen', turn);
   }
   function isMyTurn () {
     let myTurn = false;
-    console.log(playerTurn);
+    // console.log(playerTurn);
     if (isHost && playerTurn == 1) {
       myTurn = true;
     } else if (!isHost && playerTurn == 2) {
@@ -62,24 +62,18 @@ export default function GameBoard(props) {
     }
     return myTurn;
   }
-  // function sendText () {
-  //   console.log('sending')
-  //   socket.emit('send-message', {player: isHost ? 1 : 2, text: gameData.currentText}, roomNumber, gameData.turn == 1 ? 2 : 1);
-  //   setGameData({...gameData, currentText: ''})
-  // }
-  // const handleTextChange = (e) => {
-  //   setGameData({...gameData, currentText: e.target.value})
-  // }
 
   const TurnCards = () => {
     return (
       <>
-        <div style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div className='Game__turn-card-container'>
           <div className='turn-card' onClick={ ()=> chooseTurn('first') }>
-            Go<br></br> First
+            <img src={one} alt='one'></img>
+            <a hidden href="https://www.flaticon.com/free-icons/number" title="number icons">Number icons created by Freepik - Flaticon</a>
           </div>
           <div className='turn-card' onClick={ ()=> chooseTurn('second') }>
-            Go<br></br> Second
+            <img src={two} alt='two'></img>
+            <a hidden href="https://www.flaticon.com/free-icons/two" title="two icons">Two icons created by Freepik - Flaticon</a>
           </div>
         </div>
       </>
@@ -89,22 +83,22 @@ export default function GameBoard(props) {
   const Header = () => {
     return (
       <div>
-        <h2 style={{marginBottom: '0', marginTop: '1em'}}>Choices, Choices...</h2>
+        <h2 style={{marginBottom: '0', marginTop: '1em', color: 'var(--main-color2)'}}>Go First? or Second?</h2>
       </div>
     )
   }
   
   const WaitingHost = () => {
     return (
-      <div style={{ marginTop: '15%' }}>
-        <h1>Waiting for host to make a choice.</h1>
+      <div style={{ margin: '15% 0', color: 'var(--main-color2)' }}>
+        <h1>Waiting for Host to Make a Choice...</h1>
       </div>
     )
   }
   const WaitingPlayer = () => {
     return (
-      <div style={{ marginTop: '15%' }}>
-        <h1>Waiting for your archenemy.</h1>
+      <div style={{ margin: '15% 0', color: 'var(--main-color2)' }}>
+        <h1>Waiting For Your Archenemy...</h1>
       </div>
     )
   }
@@ -114,17 +108,19 @@ export default function GameBoard(props) {
 
   return (
     <div className='GameBlock'>
-      { isHost && !data.isTurnChosen && data.isGameReady &&<>
+      { isHost && !data.isTurnChosen && data.isGameReady &&
+      <div className='Game__transition'>
         <Header />
         <TurnCards />
-      </>
+      </div>
       }
       { !data.isGameReady && isHost && <WaitingPlayer /> }
       { !data.isTurnChosen && !isHost && <WaitingHost /> }
-      { data.isGameReady && data.isTurnChosen && <div style={{ display:'flex', flexDirection: 'column', alignItems:'center' }}>
+      { data.isGameReady && data.isTurnChosen && 
+      <div className='Game__transition' style={{ display:'flex', flexDirection: 'column', alignItems:'center', color:'var(--main-color2)' }}>
         <h1>{isMyTurn() ? 'My Turn!' : 'Opponents Turn'}</h1>
 
-        <ConnectFour playerTurn={playerTurn} setPlayerTurn={handleSetPlayerTurn} isFirst={data.isFirst} socket={socket} roomNumber={roomNumber} isMyTurn={isMyTurn} />
+        <ConnectFour isHost={isHost} playerTurn={playerTurn} setPlayerTurn={handleSetPlayerTurn} isFirst={data.isFirst} socket={socket} roomNumber={roomNumber} isMyTurn={isMyTurn} />
 
       </div> }
     </div>

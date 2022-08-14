@@ -1,12 +1,24 @@
 @import './global.css';
 
 .App {
+  font-family: 'Roboto', sans-serif;
   text-align: center;
   width: 100%;
   /* margin: auto; */
+  transition: all 1s ease;
+}
+.App__top {
+  width: 100%;
+  /* margin: auto; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 9999999;
+  position: relative;
+  background-color: white;
 }
 .App__container {
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,17 +26,27 @@
 }
 .top-status {
   width: 100%;
-  background-color: aliceblue;
-  border: 3px double rgb(207, 193, 193) ;
+  background-color: var(--main-color3);
+  /* border: 3px solid var(--main-color3) ; */
   border-radius: 6px;
-  max-width: 700px;
+  max-width: 750px;
   min-width: 300px;
   display: flex;
   justify-content: space-evenly;
+  color: white;
+  padding: .5em 0;
 }
 .top-status span {
   /* margin-left: .5em;
   margin-right: .5em; */
   margin-left: 1em;
   margin-right: 1em;
+}
+.App_notification {
+  position: fixed;
+  bottom: 0em;
+  text-align: center;
+  width: 100%;
+  font-size: x-large;
+  color: var(--main-color2);
 }
