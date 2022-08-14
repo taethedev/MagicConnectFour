@@ -392,7 +392,7 @@ export default function ConnectFour(props) {
               : "Player 2"}{" "}
             WON!
           </h1>
-          <button onClick={sendRestartGame}>Play Again</button>
+          <button className="btn button-53" onClick={sendRestartGame}>Play Again</button>
           <br />
           <br />
         </>
