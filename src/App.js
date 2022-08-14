@@ -7,12 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import io from "socket.io-client";
 import MainMenu from './Components/MainMenu';
 import GameBoard from './Components/GameBoard';
+import Instruction from './Components/Instruction';
 import logo from './assets/images/logo_white.png'
 const SERVER = process.env.REACT_APP_SOCKET_SERVER;
 const socket = io(SERVER);
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isInstruction, setIsInstruction] = useState(true);
   const [maxPlayer, setMaxplayer] = useState(2);
   const [playerCount, setPlayerCount] = useState(1);
 
@@ -45,6 +47,7 @@ function App() {
         window.location = window.location;
       }, 2000)
     })
+    if (window.sessionStorage.getItem('understand') === 'true') setIsInstruction(false);
 
     return () => {
       socket.off('connect');
@@ -104,9 +107,9 @@ function App() {
             {data.roomNumber && <span>Room({playerCount}/{maxPlayer}): {data.roomNumber}</span> }
           </div>
         </div>
-        
-        { !data.roomNumber && <MainMenu joinRoom={joinRoom} isConnected={isConnected} isRoomFull={data.roomFull} resetRoomFull={resetRoomFull} /> }
-        { data.roomNumber && isConnected && <GameBoard socket={socket} isHost={data.isHost} roomNumber={data.roomNumber} /> }
+        { isInstruction && <Instruction setIsInstruction={setIsInstruction} /> }
+        { !data.roomNumber && !isInstruction && <MainMenu joinRoom={joinRoom} isConnected={isConnected} isRoomFull={data.roomFull} resetRoomFull={resetRoomFull} /> }
+        { data.roomNumber && isConnected && !isInstruction && <GameBoard socket={socket} isHost={data.isHost} roomNumber={data.roomNumber} /> }
       </div>
     </div>
   );

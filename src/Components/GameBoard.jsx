@@ -18,7 +18,7 @@ export default function GameBoard(props) {
       // Pre-Game
     socket.on('set-turn', (turn) => {
       // console.log('setting turn')
-      let myTurn = turn === 'first' ? 'first' : 'second';
+      let myTurn = turn === 'first' ? true: false;
       setData({...data, isFirst: myTurn, isTurnChosen: true, isGameReady: true});
       setPlayerTurn(turn === 'first' ? '2' : '1')
     })

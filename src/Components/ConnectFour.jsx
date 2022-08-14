@@ -16,24 +16,39 @@ const winTypes = {
 };
 
 export default function ConnectFour(props) {
-    const [win, setWin] = useState(null);
-    const [flashTimer, setFlashTimer] = useState(null);
-    const [dropping, setDropping] = useState(false);
-    const [readyCount, setReadyCount] = useState(0);
-    const domBoard = useRef(null);
-
     const {isHost, playerTurn, setPlayerTurn, isFirst, socket, roomNumber, isMyTurn} = props;
-    const [boardSettings, setBoardSettings] = useState({
+    
+    const player1 = ()=> {
+        if (isHost && isFirst) return '#FF6B81';
+        else if (isHost && !isFirst) return "#3DD1E7";
+        else if (!isHost && isFirst) return '#3DD1E7';
+        else if (!isHost && !isFirst) return "#FF6B81";
+    }
+    const player2 = ()=> {
+        if (isHost && isFirst) return '#3DD1E7';
+        else if (isHost && !isFirst) return "#FF6B81";
+        else if (!isHost && isFirst) return '#FF6B81';
+        else if (!isHost && !isFirst) return "#3DD1E7";
+    }
+    const rules = {
         rows: 8,
         columns: 10,
         dropAnimationRate: 50,
         flashAnimationRate: 600,
         colors: {
             empty: "#FFFFFF",
-            p1: (!isHost && isFirst) || (isHost && !isFirst) ? "#3DD1E7" : "#FF6B81",
-            p2: (!isHost && isFirst) || (isHost && !isFirst) ? "#FF6B81" : "#3DD1E7"
-            }
-        })
+            p1: player1(),
+            p2: player2()
+        }
+    }
+
+    const [win, setWin] = useState(null);
+    const [flashTimer, setFlashTimer] = useState(null);
+    const [dropping, setDropping] = useState(false);
+    const [readyCount, setReadyCount] = useState(0);
+    const domBoard = useRef(null);
+
+    const [boardSettings, setBoardSettings] = useState(rules)
     const [board, setBoard] = useState(createBoard());
 
   // Disable buttons if not my turn
