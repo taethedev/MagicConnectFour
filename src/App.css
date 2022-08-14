@@ -17,6 +17,21 @@
   position: relative;
   background-color: white;
 }
+.App__logo {
+  display: inline-block;
+  width: 100px; 
+  height: 100px; 
+  margin-top: 2em; 
+  background-image: url('/src/assets/images/logo_white.png'); 
+  background-size: contain; 
+  background-position:center center;
+  background-repeat: no-repeat;
+  transition: all .5s ease;
+}
+.App__logo:hover {
+  background-image: url('/src/assets/images/logo_black.png'); 
+  transition: all .5s ease;
+}
 .App__container {
   /* height: 100vh; */
   display: flex;

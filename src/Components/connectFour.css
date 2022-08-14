@@ -21,7 +21,7 @@
     min-width: var(--cell-size-mobile);
     min-height: var(--cell-size-mobile);
     border-radius: 50%;
-    border-color: rgba(19, 19, 19, 0.349);
+    border-color: rgba(0, 0, 0, 0.685);
     animation-duration: .5s;
     animation-name: shrink;
     
@@ -30,7 +30,7 @@
     background-color: #FFFFFF;
 }
 .board-block-wrapper {
-    border: 1px solid rgb(226, 160, 160);
+    border: 1px solid black;
     background-color: #f9e852;
 }
 

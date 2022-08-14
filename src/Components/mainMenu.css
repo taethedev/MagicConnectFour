@@ -1,20 +1,17 @@
 .Main_header {
     color: var(--main-color2);
-    margin-top: 2em;
+    margin-bottom: 2em;
 }
 .Main__form-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 18% 0;
+    margin: 2em 0 5em 0;
     /* padding: 1em; */
 }
 .Main__form-container .btn {
     margin-top: 3em;
 }
-
-
-
 .form__input {
     color: #333;
     font-size: 1.2rem;
@@ -26,4 +23,18 @@
     display: block;
     border: 2px solid black;
     transition: all 0.3s;
+  }
+  .Main__small-logo {
+    width: 40px;
+    height: 40px;
+    margin-top: 2em;
+    display: inline-block;
+    border-radius: 50%;
+    border: 1px solid black;
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: all .3s ease;
+  }
+  .Main__small-logo:hover {
+    transform: translateY(-10px);
   }

@@ -100,6 +100,8 @@ export default function GameBoard(props) {
       <div style={{ margin: '15% 0', color: 'var(--main-color2)' }}>
         <h1>Waiting For Your Archenemy...</h1>
         <h2><a style={{color: 'var(--main-color3)', textDecoration: 'underline', cursor:'pointer'}} onClick={()=> sendInvite()}>Send Invitation</a></h2>
+        <h2>or</h2>
+        <h2><a style={{color: 'var(--main-color3)', textDecoration: 'underline', cursor:'pointer'}} href={`/?room=`+roomNumber} target={'_blank'}>Play by Myself</a></h2>
       </div>
     )
   }

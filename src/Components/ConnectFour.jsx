@@ -5,6 +5,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import "./connectFour.css";
+import blackLogo from '../assets/images/logo_black.png';
+import whiteLogo from '../assets/images/logo_white.png';
 
 
 
@@ -162,7 +164,6 @@ export default function ConnectFour(props) {
       }
       if (currentRow > 0) {
         let c = getDomBoardCell(getIndex(currentRow - 1, column));
-        let bg = c.style.backgroundColor;
         c.style.backgroundColor = boardSettings.colors.empty;
       }
       let c = getDomBoardCell(getIndex(currentRow, column));
@@ -341,7 +342,7 @@ export default function ConnectFour(props) {
           className="cell drop-button"
           onClick={() => sendHandleDrop(i)}
           style={{
-            backgroundColor: getPlayerColor(playerTurn)
+            backgroundColor: getPlayerColor(playerTurn),
           }}
         />
       );

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Loading from './Loading';
 import './mainMenu.css';
+import blackLogo from '../assets/images/logo_black.png'
+import whiteLogo from '../assets/images/logo_white.png'
 
 export default function MainMenu(props) {
     const { joinRoom, isConnected, isRoomFull, resetRoomFull } = props;
@@ -39,6 +41,12 @@ export default function MainMenu(props) {
         <div className='GameBlock'>
             <div>
                 <div>
+                    <div>
+                        <span className='Main__small-logo' style={{backgroundColor: '#FF6B81'}}></span>
+                        <span className='Main__small-logo' style={{backgroundColor: '#3DD1E7'}}></span>
+                        <span className='Main__small-logo' style={{backgroundColor: '#FF6B81'}}></span>
+                        <span className='Main__small-logo' style={{backgroundColor: '#3DD1E7'}}></span>
+                    </div>
                     <h1 className='Main_header'>Welcome to Magic Connect 4</h1>
                 </div>
                 <div className='Main__form-container'>

@@ -50,7 +50,7 @@ function App() {
 
       setTimeout(()=> {
         window.location = window.location.origin;
-      }, 2000)
+      }, 1500)
     })
     if (window.sessionStorage.getItem('understand') === 'true') setIsInstruction(false);
     if (room) joinRoom(room);
@@ -103,7 +103,7 @@ function App() {
       <ToastContainer />
       <div className='App__container'>
         <div className='App__top'>
-          <img style={{maxWidth: '100px', paddingTop: '2em'}} src={logo} alt="logo" />
+          <div className='App__logo'></div>
           <h1 style={{color: 'var(--main-color2)'}}><span style={{color: 'var(--main-p2)'}}>Magic</span> <span style={{color: 'black'}}>Connect</span> <span style={{color: 'var(--main-p1)'}}>Four</span></h1>
           <span>by <a style={{textDecoration: 'none'}} href="https://github.com/taethedev" target="_blank" rel="noreferrer">taeTheDev.</a></span>
           <div className='top-status'>
