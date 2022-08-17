@@ -1,5 +1,5 @@
 {
-  "name": "magic-connect-four",
+  "name": "MagicConnectFour",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
