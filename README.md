@@ -6,7 +6,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a href="https://github.com/othneildrew/Best-README-Template" target="_blank">
     <img src="https://github.com/taethedev/taethedev/blob/main/logo_white.png" alt="Logo" width="80" height="80">
   </a>
 
