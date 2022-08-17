@@ -40,6 +40,8 @@ Back End
 * Express.js
 * Socket.io
 
+Node v16.14.0
+
 ### Installation
 
 1. Clone the repo
