@@ -7,7 +7,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="https://todocreativeagency.com/wp-content/uploads/2021/08/todo-favicon.jpg" alt="Logo" width="80" height="80">
+    <img src="https://github.com/taethedev/taethedev/blob/main/logo_white.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Magic Connect Four (Multiplayer) </br>v. 1.0.0</h3>
@@ -15,7 +15,7 @@
   <p align="center">
     Connect 4 built with React/Socket.io/CSS/HTML & some Magic
     <br />
-    :information_desk_person: <a href= "https://magic-todo-list.vercel.app/"><Strong>Try It Out!</Strong><a> 
+    :information_desk_person: <a href= "https://magic-connect-four.vercel.app/"><Strong>Try It Out!</Strong><a> 
     <br />
     <br />
   </p>
@@ -25,15 +25,20 @@
 ## About The Project
 
 Multiplayer Connect 4 game made with React and Socket.io. Purpose of this project was to experiment with Socket.io to make a multiplayer game.
+  You need to have 
 
-<img src="https://github.com/taethedev/ToDoList/blob/master/connect-four.PNG" alt="Sample">
+<img src="https://github.com/taethedev/MagicConnectFour/blob/master/connect-four.png" alt="Sample">
 
 ### Built With
 
+Front End
 * React
-* Socket.io
 * HTML
 * CSS
+  
+Back End
+* Express.js
+* Socket.io
 
 <!-- USAGE EXAMPLES -->
 ## Usage
