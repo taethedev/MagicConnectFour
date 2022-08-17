@@ -46,7 +46,7 @@ Node v16.14.0
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/taethedev/MagicConnectFour.git
+   git clone https://github.com/taethedev/MagicConnectFour.git --recursive
    
    ```
 2. Install/Start React
