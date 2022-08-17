@@ -9,7 +9,7 @@ import MainMenu from './Components/MainMenu';
 import GameBoard from './Components/GameBoard';
 import Instruction from './Components/Instruction';
 import logo from './assets/images/logo_white.png'
-const SERVER = process.env.REACT_APP_SOCKET_SERVER;
+const SERVER = process.env.REACT_APP_SOCKET_SERVER || 'http://localhost:8080';
 const socket = io(SERVER);
 
 const str = window.location.search;
